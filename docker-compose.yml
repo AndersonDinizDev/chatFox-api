@@ -14,6 +14,8 @@ services:
             - redis
         networks:
             - laravel
+        ports:
+            - "6001:6001" # Adicionando a exposição da porta 6001
 
     # nginx
     nginx:
