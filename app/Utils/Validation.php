@@ -13,11 +13,16 @@ class Validation
         ]);
     }
 
-    public static function validateEmail($email)
+    public static function validateEmail($email, $unique = false)
     {
-        return Validator::make(['email' => $email], [
+        $rules = [
             'email' => 'required|email|min:8'
-        ]);
+        ];
+
+        if ($unique) {
+            $rules['email'] .= '|unique:users';
+        }
+        return Validator::make(['email' => $email], $rules);
     }
 
     public static function validatePassword($password)
