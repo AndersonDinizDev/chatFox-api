@@ -6,6 +6,13 @@ use Illuminate\Support\Facades\Validator;
 
 class Validation
 {
+    public static function validateName($name)
+    {
+        return Validator::make(['name' => $name], [
+            'name' => 'required|string|min:3'
+        ]);
+    }
+
     public static function validateEmail($email)
     {
         return Validator::make(['email' => $email], [
