@@ -57,7 +57,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validation_name = Validation::validateName($request->name);
+            $validation_email = Validation::validateEmail($request->email);
+            $validation_password = Validation::validatePassword($request->password);
+
+            if ($validation_name->fails() || $validation_email->fails() || $validation_password->fails()) {
+                return response()->json(['error' => true, 'message' => $validation_name->errors()->merge($validation_email->errors()->merge($validation_password->errors()))]);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     /**
