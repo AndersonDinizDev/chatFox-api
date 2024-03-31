@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\AuthServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function __construct(AuthServices $authService)
+    {
+        $this->authService = $authService;
+    }
 
     public function login(Request $request)
     {
@@ -26,7 +32,7 @@ class UserController extends Controller
 
             $credentials = $request->only('email', 'password');
 
-            if (!$token = JWTAuth::attempt($credentials)) {
+            if (!$token = $this->authService->generateToken($credentials)) {
                 return response()->json(['error' => true, 'message' => 'Credenciais inválidas'], 401);
             }
 
@@ -107,7 +113,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy()
     {
         //
     }
